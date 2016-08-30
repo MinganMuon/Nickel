@@ -33,6 +33,20 @@ class TestCheckerBoard(unittest.TestCase):
         self.assertEqual(Cb.iswon(bboard), BLACKWON)
         # todo: add checks for wins via forced immobility
 
+    def test_getrownumber(self):
+        self.assertEqual(Cb.getrownumber(0), 0)
+        self.assertEqual(Cb.getrownumber(3), 0)
+        self.assertEqual(Cb.getrownumber(5), 1)
+        self.assertEqual(Cb.getrownumber(21), 5)
+        self.assertEqual(Cb.getrownumber(31), 7)
+
+    def test_getupmoves(self):
+        sboard = Cb.getstartingboard()
+        self.assertEqual(Cb.getupmoves(sboard, 20), [(20, 16, [])]) # left side
+        self.assertEqual(Cb.getupmoves(sboard, 22), [(22, 17, []), (22, 18, [])]) # multiple
+        self.assertEqual(Cb.getupmoves(sboard, 27), []) # nothing
+        self.assertEqual(Cb.getupmoves(sboard, 3), []) # top
+        self.assertEqual(Cb.getupmoves(sboard, 19), [(19, 15, [])])  # right side
 
 if __name__ == '__main__':
     unittest.main()

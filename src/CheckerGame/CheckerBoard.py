@@ -29,6 +29,7 @@ def getstartingboard():
         outboard.append(RED)
     return outboard
 
+
 def iswon(board):
     """
     Determines if the board represents a winning position.
@@ -44,3 +45,60 @@ def iswon(board):
     # todo: if no moves are possible for a color, the other color wins
     return won
 
+# helper functions for getpossiblemoves
+
+def getrownumber(tile):
+    """
+    Helper function that returns the 0-indexed row number of a tile.
+
+    :param tile: tile number, 0-indexed
+    :return: 0-indexed row number of tile
+    """
+    return (int)(tile/4)
+
+def getupmoves(board, tile):
+    """
+    Gets a list of possible non-jump up moves the tile can move.
+
+    :param board: 32-element list
+    :param tile: tile number (position in board, 0-indexed)
+    :return: list of tuples - (starting tile, ending tile, list of jumped tiles)
+    """
+
+    rlist = []
+
+    # this is somewhat hackish of a solution
+    rownumber = getrownumber(tile)
+    oddrn = rownumber % 2
+    if (tile not in toptiles) and (tile not in lefttiles):  # left move
+        if oddrn:
+            if board[tile - 5] == EMPTY:
+                rlist.append((tile, tile - 5, []))
+        else:
+            if board[tile - 4] == EMPTY:
+                rlist.append((tile, tile - 4, []))
+    if (tile not in toptiles) and (tile not in righttiles):  # right move
+        if oddrn:
+            if board[tile - 4] == EMPTY:
+                rlist.append((tile, tile - 4, []))
+        else:
+            if board[tile - 3] == EMPTY:
+                rlist.append((tile, tile - 3, []))
+
+    return rlist
+
+# end helper functions
+
+def getpossiblemoves(board, tile):
+    """
+    Gets the possible moves for the specified tile number on the specified board.
+
+    :param board: 32-element list
+    :param tile: tile number (position in board, 0-indexed)
+    :return: list of tuples - (starting tile, ending tile, list of jumped tiles)
+    """
+
+    # return list
+    rlist = []
+
+    # get non-jump moves
