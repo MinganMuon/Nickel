@@ -8,3 +8,7 @@ BLACK = 'black'
 RED = 'red'
 EMPTY = 'empty'
 INVALID = 'invalid'
+
+BLACKWON = 'blackwon'
+REDWON = 'redwon'
+NOWIN = 'nowin'

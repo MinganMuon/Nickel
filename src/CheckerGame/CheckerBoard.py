@@ -28,3 +28,19 @@ def getstartingboard():
     for i in range(12):
         outboard.append(RED)
     return outboard
+
+def iswon(board):
+    """
+    Determines if the board represents a winning position.
+
+    :param board: 32-element list
+    :return: BLACKWON, REDWON, or NOWIN
+    """
+    won = NOWIN
+    if board.count(RED) == 0:  # black wins
+        won = BLACKWON
+    elif board.count(BLACK) == 0:  # red wins
+        won = REDWON
+    # todo: if no moves are possible for a color, the other color wins
+    return won
+
