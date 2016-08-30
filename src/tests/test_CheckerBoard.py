@@ -48,5 +48,15 @@ class TestCheckerBoard(unittest.TestCase):
         self.assertEqual(Cb.getupmoves(sboard, 3), []) # top
         self.assertEqual(Cb.getupmoves(sboard, 19), [(19, 15, [])])  # right side
 
+    def test_getdownmoves(self):
+        sboard = Cb.getstartingboard()
+        self.assertEqual(Cb.getdownmoves(sboard, 4), []) # left side with no right move
+        self.assertEqual(Cb.getdownmoves(sboard, 8), [(8, 12, []), (8, 13, [])]) # multiple
+        self.assertEqual(Cb.getdownmoves(sboard, 6), [])  # nothing
+        self.assertEqual(Cb.getdownmoves(sboard, 26), [])  # nothing again
+        self.assertEqual(Cb.getdownmoves(sboard, 30), [])  # bottom
+        self.assertEqual(Cb.getdownmoves(sboard, 11), [(11, 15, [])])  # right side
+
+
 if __name__ == '__main__':
     unittest.main()

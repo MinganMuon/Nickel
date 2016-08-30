@@ -56,6 +56,7 @@ def getrownumber(tile):
     """
     return (int)(tile/4)
 
+
 def getupmoves(board, tile):
     """
     Gets a list of possible non-jump up moves the tile can move.
@@ -84,6 +85,38 @@ def getupmoves(board, tile):
         else:
             if board[tile - 3] == EMPTY:
                 rlist.append((tile, tile - 3, []))
+
+    return rlist
+
+
+def getdownmoves(board, tile):
+    """
+    Gets a list of possible non-jump down moves the tile can move.
+
+    :param board: 32-element list
+    :param tile: tile number (position in board, 0-indexed)
+    :return: list of tuples - (starting tile, ending tile, list of jumped tiles)
+    """
+
+    rlist = []
+
+    # this is somewhat hackish of a solution
+    rownumber = getrownumber(tile)
+    oddrn = rownumber % 2
+    if (tile not in bottomtiles) and (tile not in lefttiles):  # left move
+        if oddrn:
+            if board[tile + 3] == EMPTY:
+                rlist.append((tile, tile + 3, []))
+        else:
+            if board[tile + 4] == EMPTY:
+                rlist.append((tile, tile + 4, []))
+    if (tile not in bottomtiles) and (tile not in righttiles):  # right move
+        if oddrn:
+            if board[tile + 4] == EMPTY:
+                rlist.append((tile, tile + 4, []))
+        else:
+            if board[tile + 5] == EMPTY:
+                rlist.append((tile, tile + 5, []))
 
     return rlist
 
