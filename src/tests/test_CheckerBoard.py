@@ -8,6 +8,11 @@ import CheckerGame.CheckerBoard as Cb
 import unittest
 
 
+# note: I have stopped writing unit tests right now; they are too time consuming when I want to get this off the ground.
+#       I may resume them later or do higher-level tests or just do them as I want to make sure something works.
+#       Testing code that is simple and I know works is totally redundant and stupid -- I'm not doing it.
+
+
 class TestCheckerBoard(unittest.TestCase):
 
     def test_getemptyboard(self):
@@ -41,6 +46,7 @@ class TestCheckerBoard(unittest.TestCase):
         self.assertEqual(Cb.getrownumber(31), 7)
 
     def test_getupmoves(self):
+        # this does not test filtertype
         sboard = Cb.getstartingboard()
         self.assertEqual(Cb.getupmoves(sboard, 20), [(20, 16, [])]) # left side
         self.assertEqual(Cb.getupmoves(sboard, 22), [(22, 17, []), (22, 18, [])]) # multiple
@@ -49,6 +55,7 @@ class TestCheckerBoard(unittest.TestCase):
         self.assertEqual(Cb.getupmoves(sboard, 19), [(19, 15, [])])  # right side
 
     def test_getdownmoves(self):
+        # this does not test filtertype
         sboard = Cb.getstartingboard()
         self.assertEqual(Cb.getdownmoves(sboard, 4), []) # left side with no right move
         self.assertEqual(Cb.getdownmoves(sboard, 8), [(8, 12, []), (8, 13, [])]) # multiple
@@ -57,6 +64,9 @@ class TestCheckerBoard(unittest.TestCase):
         self.assertEqual(Cb.getdownmoves(sboard, 30), [])  # bottom
         self.assertEqual(Cb.getdownmoves(sboard, 11), [(11, 15, [])])  # right side
 
+    def test_getpossiblemoves(self):
+        # code this maybe?
+        pass
 
 if __name__ == '__main__':
     unittest.main()
