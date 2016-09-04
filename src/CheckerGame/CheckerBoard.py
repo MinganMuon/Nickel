@@ -57,12 +57,16 @@ def getrownumber(tile):
     return (int)(tile/4)
 
 
-def getupmoves(board, tile):
+def getupmoves(board, tile, filtertype=EMPTY):
     """
     Gets a list of possible non-jump up moves the tile can move.
 
+    filtertype can be used to filter the up moves by a tile type other than EMPTY;
+    for example, to determine if any tiles could be jumped by a piece.
+
     :param board: 32-element list
     :param tile: tile number (position in board, 0-indexed)
+    :param filtertype: the tile type that the tile in question is checked against
     :return: list of tuples - (starting tile, ending tile, list of jumped tiles)
     """
 
@@ -73,28 +77,32 @@ def getupmoves(board, tile):
     oddrn = rownumber % 2
     if (tile not in toptiles) and (tile not in lefttiles):  # left move
         if oddrn:
-            if board[tile - 5] == EMPTY:
+            if board[tile - 5] == filtertype:
                 rlist.append((tile, tile - 5, []))
         else:
-            if board[tile - 4] == EMPTY:
+            if board[tile - 4] == filtertype:
                 rlist.append((tile, tile - 4, []))
     if (tile not in toptiles) and (tile not in righttiles):  # right move
         if oddrn:
-            if board[tile - 4] == EMPTY:
+            if board[tile - 4] == filtertype:
                 rlist.append((tile, tile - 4, []))
         else:
-            if board[tile - 3] == EMPTY:
+            if board[tile - 3] == filtertype:
                 rlist.append((tile, tile - 3, []))
 
     return rlist
 
 
-def getdownmoves(board, tile):
+def getdownmoves(board, tile, filtertype=EMPTY):
     """
     Gets a list of possible non-jump down moves the tile can move.
 
+    filtertype can be used to filter the down moves by a tile type other than EMPTY;
+    for example, to determine if any tiles could be jumped by a piece.
+
     :param board: 32-element list
     :param tile: tile number (position in board, 0-indexed)
+    :param filtertype: the tile type that the tile in question is checked against
     :return: list of tuples - (starting tile, ending tile, list of jumped tiles)
     """
 
@@ -105,17 +113,17 @@ def getdownmoves(board, tile):
     oddrn = rownumber % 2
     if (tile not in bottomtiles) and (tile not in lefttiles):  # left move
         if oddrn:
-            if board[tile + 3] == EMPTY:
+            if board[tile + 3] == filtertype:
                 rlist.append((tile, tile + 3, []))
         else:
-            if board[tile + 4] == EMPTY:
+            if board[tile + 4] == filtertype:
                 rlist.append((tile, tile + 4, []))
     if (tile not in bottomtiles) and (tile not in righttiles):  # right move
         if oddrn:
-            if board[tile + 4] == EMPTY:
+            if board[tile + 4] == filtertype:
                 rlist.append((tile, tile + 4, []))
         else:
-            if board[tile + 5] == EMPTY:
+            if board[tile + 5] == filtertype:
                 rlist.append((tile, tile + 5, []))
 
     return rlist
