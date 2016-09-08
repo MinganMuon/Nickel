@@ -57,12 +57,99 @@ def getrownumber(tile):
     return (int)(tile/4)
 
 
+def getleftup(tile):
+    """
+    Gets the tile left and up of tile. If an invalid tile number results, return -1.
+
+    :param tile:  tile number (position in board, 0-indexed)
+    :return: tile left and up of tile; if not possible, returns -1
+    """
+
+    newtile = -1
+
+    rownumber = getrownumber(tile)
+    oddrn = rownumber % 2
+
+    if (tile not in toptiles) and (tile not in lefttiles):  # left and up
+        if oddrn:
+            newtile = tile - 5
+        else:
+            newtile = tile - 4
+
+    return newtile
+
+
+def getrightup(tile):
+    """
+    Gets the tile right and up of tile. If an invalid tile number results, return -1.
+
+    :param tile:  tile number (position in board, 0-indexed)
+    :return: tile right and up of tile; if not possible, returns -1
+    """
+
+    newtile = -1
+
+    rownumber = getrownumber(tile)
+    oddrn = rownumber % 2
+
+    if (tile not in toptiles) and (tile not in righttiles):  # right and up
+        if oddrn:
+            newtile = tile - 4
+        else:
+            newtile = tile - 3
+
+    return newtile
+
+
+def getleftdown(tile):
+    """
+    Gets the tile left and down of tile. If an invalid tile number results, return -1.
+
+    :param tile:  tile number (position in board, 0-indexed)
+    :return: tile left and down of tile; if not possible, returns -1
+    """
+
+    newtile = -1
+
+    rownumber = getrownumber(tile)
+    oddrn = rownumber % 2
+
+    if (tile not in bottomtiles) and (tile not in lefttiles):  # left and down
+        if oddrn:
+            newtile = tile + 3
+        else:
+            newtile = tile + 4
+
+    return newtile
+
+
+def getrightdown(tile):
+    """
+    Gets the tile right and down of tile. If an invalid tile number results, return -1.
+
+    :param tile:  tile number (position in board, 0-indexed)
+    :return: tile right and down of tile; if not possible, returns -1
+    """
+
+    newtile = -1
+
+    rownumber = getrownumber(tile)
+    oddrn = rownumber % 2
+
+    if (tile not in bottomtiles) and (tile not in righttiles):  # right and down
+        if oddrn:
+            newtile = tile + 4
+        else:
+            newtile = tile + 5
+
+    return newtile
+
+
 def getupmoves(board, tile, filtertype=EMPTY):
     """
     Gets a list of possible non-jump up moves the tile can move.
 
-    filtertype can be used to filter the up moves by a tile type other than EMPTY;
-    for example, to determine if any tiles could be jumped by a piece.
+    filtertype can be used to filter the up moves by a tile type other than EMPTY.
 
     :param board: 32-element list
     :param tile: tile number (position in board, 0-indexed)
@@ -72,23 +159,16 @@ def getupmoves(board, tile, filtertype=EMPTY):
 
     rlist = []
 
-    # this is somewhat hackish of a solution
-    rownumber = getrownumber(tile)
-    oddrn = rownumber % 2
-    if (tile not in toptiles) and (tile not in lefttiles):  # left move
-        if oddrn:
-            if board[tile - 5] == filtertype:
-                rlist.append((tile, tile - 5, []))
-        else:
-            if board[tile - 4] == filtertype:
-                rlist.append((tile, tile - 4, []))
-    if (tile not in toptiles) and (tile not in righttiles):  # right move
-        if oddrn:
-            if board[tile - 4] == filtertype:
-                rlist.append((tile, tile - 4, []))
-        else:
-            if board[tile - 3] == filtertype:
-                rlist.append((tile, tile - 3, []))
+    # left move
+    leftup = getleftup(tile)
+    if leftup != -1:
+        if board[leftup] == filtertype:
+            rlist.append((tile, leftup, []))
+    # right move
+    rightup = getrightup(tile)
+    if rightup != -1:
+        if board[rightup] == filtertype:
+            rlist.append((tile, rightup, []))
 
     return rlist
 
@@ -97,8 +177,7 @@ def getdownmoves(board, tile, filtertype=EMPTY):
     """
     Gets a list of possible non-jump down moves the tile can move.
 
-    filtertype can be used to filter the down moves by a tile type other than EMPTY;
-    for example, to determine if any tiles could be jumped by a piece.
+    filtertype can be used to filter the down moves by a tile type other than EMPTY.
 
     :param board: 32-element list
     :param tile: tile number (position in board, 0-indexed)
@@ -108,23 +187,16 @@ def getdownmoves(board, tile, filtertype=EMPTY):
 
     rlist = []
 
-    # this is somewhat hackish of a solution
-    rownumber = getrownumber(tile)
-    oddrn = rownumber % 2
-    if (tile not in bottomtiles) and (tile not in lefttiles):  # left move
-        if oddrn:
-            if board[tile + 3] == filtertype:
-                rlist.append((tile, tile + 3, []))
-        else:
-            if board[tile + 4] == filtertype:
-                rlist.append((tile, tile + 4, []))
-    if (tile not in bottomtiles) and (tile not in righttiles):  # right move
-        if oddrn:
-            if board[tile + 4] == filtertype:
-                rlist.append((tile, tile + 4, []))
-        else:
-            if board[tile + 5] == filtertype:
-                rlist.append((tile, tile + 5, []))
+    # left move
+    leftdown = getleftdown(tile)
+    if leftdown != -1:
+        if board[leftdown] == filtertype:
+            rlist.append((tile, leftdown, []))
+    # right move
+    rightdown = getrightdown(tile)
+    if rightdown != -1:
+        if board[rightdown] == filtertype:
+            rlist.append((tile, rightdown, []))
 
     return rlist
 

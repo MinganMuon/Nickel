@@ -36,7 +36,7 @@ class TestCheckerBoard(unittest.TestCase):
         self.assertEqual(Cb.iswon(sboard), NOWIN) # checks
         self.assertEqual(Cb.iswon(rboard), REDWON)
         self.assertEqual(Cb.iswon(bboard), BLACKWON)
-        # todo: add checks for wins via forced immobility
+        # add checks for wins via forced immobility
 
     def test_getrownumber(self):
         self.assertEqual(Cb.getrownumber(0), 0)
