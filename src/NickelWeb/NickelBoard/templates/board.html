@@ -1,0 +1,20 @@
+{% load static %}
+<html>
+<head>
+<meta charset="iso-8859-1">
+<script src="{% static 'brython.js' %}"></script>
+</head>
+<body onLoad="brython()">
+<script type="text/python">
+from browser import document as doc
+from browser import alert
+
+def lala(ev):
+    alert("Hello!")
+    doc["echo"].text = "ha"
+
+doc["echo"].bind('click', lala)
+</script>
+<p><button id="echo">click !</button>
+</body>
+</html>
