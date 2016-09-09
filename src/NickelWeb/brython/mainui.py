@@ -1,4 +1,5 @@
 from browser import document as doc
+from browser import svg
 from browser import alert
 
 
