@@ -14,9 +14,9 @@ research. It consists of three sections:
 * The AI(s)
 
 The web interface will give a easy UI for users to play checkers
-from. It will have support for multiple users, with their
-wins/losses against different AIs recorded in a database, and
-support for multiple AIs.
+from. It may have support for multiple users, with their
+wins/losses against different AIs recorded in a database It 
+will have support for multiple AIs.
 
 Nickel was developed for AI research, particularly in the field
 of neural networks. As such, the AI section will be the most
@@ -29,8 +29,7 @@ neural networks and other AI related tasks.
 
 A ? means that said goal may be pushed to a later release.
 A ~ means that said goal will be worked on but not completed
-until a later release. A ^ means that said goal is for a later
-release.
+until a later release.
 
 ### CheckerGame
 
@@ -45,9 +44,7 @@ release.
 libraries
 * Add the basic game logic
 * Add nice graphics and make the UI user-friendly~
-* Add support for selecting different AIs?
-* Add support for users^
-* Add support for recording wins and losses^
+* Add support for selecting different AIs~
 * Test/evaluate the UI via different browsers and users~
 
 ### AI

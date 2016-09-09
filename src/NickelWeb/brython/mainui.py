@@ -2,8 +2,7 @@ from browser import document as doc
 from browser import alert
 
 
-def lala(ev):
-    alert("Hello!")
-    doc["echo"].text = "ha"
+def newgame(ev):
+    alert("Starting new game with " + doc["aiselect"].title + "as AI!")
 
-doc["echo"].bind('click', lala)
+doc["play"].bind('click', newgame)
