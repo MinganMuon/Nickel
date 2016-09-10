@@ -29,25 +29,26 @@ neural networks and other AI related tasks.
 
 A ? means that said goal may be pushed to a later release.
 A ~ means that said goal will be worked on but not completed
-until a later release.
+until a later release. A ^ means that said goal has been pushed
+to a later release.
 
 ### CheckerGame
 
 * Add support for man/king jumps
-* Add support for detecting wins by immobilization?
-* Optimize the functions?
+* Add support for detecting wins by immobilization^
+* Optimize the functions^
 
 ### Web Interface
 
-* Develop the basic UI
+* Develop the basic UI - DONE
 * Interface the client-side code with the CheckerGame and AI
-libraries
+libraries - DONE
 * Add the basic game logic
-* Add nice graphics and make the UI user-friendly~
-* Add support for selecting different AIs~
+* Add nice graphics and make the UI user-friendly^
+* Add support for selecting different AIs~ - DONE
 * Test/evaluate the UI via different browsers and users~
 
 ### AI
 
 * Develop a random AI that gets the possible moves and selects
-one at random.
+one at random. - DONE
