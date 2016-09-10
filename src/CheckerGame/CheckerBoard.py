@@ -201,11 +201,11 @@ def getdownmoves(board, tile, filtertype=EMPTY):
     return rlist
 
 
-def getupjumpmoves(board, tile, filtertype=(RED, REDKING), rc=3):
+def getupjumpmoves(board, tile, filtertype=(BLACK, BLACKKING), rc=3):
     """
     Gets the possible up jump moves that a tile can take.
 
-    filtertype can be used to filter the possible jump tiles by a tile type other than RED and REDKING.
+    filtertype can be used to filter the possible jump tiles by a tile type other than the default.
 
     :param board: 32-element list
     :param tile: tile number (position in board, 0-indexed)
@@ -244,10 +244,10 @@ def getupjumpmoves(board, tile, filtertype=(RED, REDKING), rc=3):
                     iboard[tile] = EMPTY
                     iboard[ru] = EMPTY
 
-    for i, st, et, jt in enumerate(rlist):
-        glist = getupjumpmoves(board, et, filtertype, rc - 1)
+    for i, ritem in enumerate(rlist):
+        glist = getupjumpmoves(iboard, ritem[1], filtertype, rc - 1)
         for gst, get, gjt in glist:
-            rlist[i] = (st, get, jt + gjt)
+            rlist[i] = (ritem[0], get, ritem[2] + gjt)
 
     return rlist
 

@@ -68,5 +68,16 @@ class TestCheckerBoard(unittest.TestCase):
         # code this maybe?
         pass
 
+    # actually, let's do some testing
+    def test_getupjumpmoves(self):
+        sboard = Cb.getstartingboard()
+        sboard[17] = BLACK
+        self.assertEqual(Cb.getupjumpmoves(sboard, 22), [(22, 13, [17])])
+        sboard[6] = EMPTY
+        self.assertEqual(Cb.getupjumpmoves(sboard, 22), [(22, 6, [17, 9])])
+        sboard[18] = BLACK
+        self.assertEqual(Cb.getupjumpmoves(sboard, 22), [(22, 6, [17, 9]), (22, 6, [18, 10])])
+        # this is fun
+
 if __name__ == '__main__':
     unittest.main()
