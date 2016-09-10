@@ -3,6 +3,7 @@ from browser import svg
 from browser import alert
 from browser import ajax
 from browser import html
+from browser import timer
 import json
 
 # defines, taken from CheckerGame/defines.py
@@ -45,6 +46,38 @@ def getcolnumber(tile):
     return x
 
 
+def gettilenumber(row, col):
+    """
+    Gets the tile number for the tile with the specified row and col numbers.
+
+    :param row: row (0-indexed)
+    :param col: col (0-indexed)
+    :return: tile number, 0-indexed
+    """
+
+    even = row % 2 # 1 if even
+    tile = row * 4
+    col += 1
+    if even == 1:
+        col += 1
+        tile += col/2
+    else:
+        col += 2
+        tile += col/2
+
+    # get it to a int
+    if tile.is_integer():
+        tile = int(tile)
+    else:
+        # something is wrong; the given row, col do not specify a valid tile position...
+        return 'error' # I should, like, do valid error checking
+
+    if even == 1:
+        return tile - 1
+    else:
+        return tile - 2
+
+
 def printboard(board):
     """
     Prints the gameboard on the screen.
@@ -64,18 +97,22 @@ def printboard(board):
             if tiletype == RED:
                 scircle = svg.circle(cx=(getcolnumber(tile)*64 + 32), cy=(getrownumber(tile)*64 + 32),
                                      r=32, fill="red")  # +32 for radius offset
+                scircle.setAttributeNS(None, 'pointer-events', 'none')
                 panel <= scircle
             elif tiletype == REDKING:
                 scircle = svg.circle(cx=(getcolnumber(tile)*64 + 32), cy=(getrownumber(tile)*64 + 32),
                                      r=32, fill="red", stroke="orange", stroke_width=5)  # +32 for radius offset
+                scircle.setAttributeNS(None, 'pointer-events', 'none')
                 panel <= scircle
             if tiletype == BLACK:
                 scircle = svg.circle(cx=(getcolnumber(tile)*64 + 32), cy=(getrownumber(tile)*64 + 32),
                                      r=32, fill="black")  # +32 for radius offset
+                scircle.setAttributeNS(None, 'pointer-events', 'none')
                 panel <= scircle
             elif tiletype == BLACKKING:
                 scircle = svg.circle(cx=(getcolnumber(tile)*64 + 32), cy=(getrownumber(tile)*64 + 32),
                                      r=32, fill="black", stroke="orange", stroke_width=5)  # +32 for radius offset
+                scircle.setAttributeNS(None, 'pointer-events', 'none')
                 panel <= scircle
 
 
@@ -153,39 +190,90 @@ def makemove(board, move):
             iboard[tile] = EMPTY
     return iboard
 
+# I HATE having to make these global
+redsturn = True
+cboard = []
+selectedtile = -1
+ai = ""
+whowon = NOWIN
+glt = None
+
+def cbclick(ev):
+    global selectedtile, cboard, redsturn
+
+    if cboard:
+        if redsturn:
+            row = int(ev.clientY / 64) - 1
+            col = int(ev.clientX / 64)
+            tile = gettilenumber(row, col)
+            if tile == 'error':
+                alert(tile)
+                return
+            #alert(tile)
+            if tile == selectedtile:
+                selectedtile = -1
+                # unhighlight selected tile
+            if selectedtile == -1:
+                if cboard[tile] == RED or cboard[tile] == REDKING:
+                    selectedtile = tile
+                    # highlight selected tile
+            if selectedtile != -1 and tile != selectedtile:
+                moves = getgpmoves(cboard, selectedtile)
+                for move in moves:
+                    if move[0] == selectedtile and move[1] == tile:
+                        selectedtile = -1
+                        cboard = makemove(cboard, move)
+                        alert(move)
+                        # print board
+                        printboard(cboard)
+                        # unhighlight selected tile
+                        redsturn = False
+                        return
+
+
+def gameloop():
+        global cboard, redsturn, selectedtile, ai, whowon, glt
+
+        if not redsturn:
+            # has the game been won?
+            whowon = getiswon(cboard)
+            if whowon == NOWIN:
+                if ai == 'RandomAI':  # do some error checking here?
+                    move = getgraim(cboard, BLACK)
+                    alert(move)
+                    cboard = makemove(cboard, move)
+                    # print board
+                    printboard(cboard)
+                redsturn = True
+                # has the game been won?
+                whowon = getiswon(cboard)
+
+        if whowon == REDWON:
+            alert("Red won!")
+            redsturn = False  # user can't move after a win
+            timer.clearinterval(glt)
+        elif whowon == BLACKWON:
+            alert("Black won!")
+            redsturn = False  # user can't move after a win
+            timer.clearinterval(glt)
+
 
 def newgame(ev):
+    global cboard, redsturn, selectedtile, ai, glt
+
     alert("Starting new game with " + doc["aiselect"].value + " as AI!")
 
     whowon = NOWIN
-    board = getgsb()
-    printboard(board)
+    cboard = getgsb()
+    printboard(cboard)
     redsturn = True
     ai = doc["aiselect"].value
     # game loop
-    while whowon == NOWIN:
-        if redsturn:
-            redsturn = False
-        else:
-            if ai == 'RandomAI':  # do some error checking here?
-                move = getgraim(board, BLACK)
-                alert(move)
-                board = makemove(board, move)
-            redsturn = True
-
-        # print board
-        printboard(board)
-
-        # has the game been won?
-        whowon = getiswon(board)
-
-    if whowon == REDWON:
-        alert("Red won!")
-    elif whowon == BLACKWON:
-        alert("Black won!")
+    glt = timer.set_interval(gameloop, 20)
 
 
 doc["play"].bind('click', newgame)
+doc["svgp"].bind('click', cbclick)
 
 choices = ['RandomAI']
 for item in choices:
