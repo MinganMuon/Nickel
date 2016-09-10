@@ -9,3 +9,7 @@ between themselves with minor changes.
 * If there are two paths that a tile can take in a jump, the ui
 would not allow the user to select between them. Is this easily
 fixable?
+* The brython code sometimes requires copy-pasting from
+defines.py and CheckerBoard.py because it can't import those
+modules; is there a fix or is it unfixable due to brython
+being client side?

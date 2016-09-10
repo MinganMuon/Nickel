@@ -73,15 +73,60 @@ def printboard(board):
                 panel <= scircle
 
 
-def newgame(ev):
-    alert("Starting new game with " + doc["aiselect"].title + "as AI!")
+def getgsb():
+    """
+    Makes an AJAX call to get the starting board
 
+    :return: 32-element list
+    """
     req = ajax.ajax()
     req.open('GET', 'gsb', False)
     req.set_header('content-type', 'application/x-www-form-urlencoded')
     req.send()
-    alert(json.loads(req.text))
+    return json.loads(req.text)
 
-    printboard(json.loads(req.text))
+
+def getiswon(board):
+    """
+    Makes an AJAX call to determine whether the game has been won.
+
+    :param board: 32-element list
+    :return: NOWIN, REDWIN, or BLACKWIN
+    """
+    req = ajax.ajax()
+    req.open('get', 'iswon/' + "?board=%s" % json.dumps(board), False)
+    req.set_header('content-type', 'application/x-www-form-urlencoded')
+    req.send()
+    return json.loads(req.text)
+
+
+def getgpmoves(board, tile):
+    """
+    Makes an AJAX call to determine the possible moves a tile can make.
+
+    :param board: 32-element list
+    :param tile: tile number (position in board, 0-indexed)
+    :return: list of lists (tuples?) - [starting tile, ending tile, list of jumped tiles]
+    """
+    req = ajax.ajax()
+    req.open('get', 'gpmoves/' + "?board=%s&tile=%s" % (json.dumps(board), tile), False)
+    req.set_header('content-type', 'application/x-www-form-urlencoded')
+    req.send()
+    return json.loads(req.text)
+
+
+def newgame(ev):
+    alert("Starting new game with " + doc["aiselect"].title + "as AI!")
+
+    sb = getgsb()
+    alert(sb)
+
+    alert(getiswon(sb))
+
+    printboard(sb)
+
+    x = getgpmoves(sb, 22)
+    alert(x)
+    alert(x[0])
 
 doc["play"].bind('click', newgame)
