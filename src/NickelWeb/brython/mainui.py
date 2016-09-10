@@ -2,6 +2,7 @@ from browser import document as doc
 from browser import svg
 from browser import alert
 from browser import ajax
+from browser import html
 import json
 
 # defines, taken from CheckerGame/defines.py
@@ -116,17 +117,11 @@ def getgpmoves(board, tile):
 
 
 def newgame(ev):
-    alert("Starting new game with " + doc["aiselect"].title + "as AI!")
+    alert("Starting new game with " + doc["aiselect"].value + " as AI!")
 
-    sb = getgsb()
-    alert(sb)
-
-    alert(getiswon(sb))
-
-    printboard(sb)
-
-    x = getgpmoves(sb, 22)
-    alert(x)
-    alert(x[0])
 
 doc["play"].bind('click', newgame)
+
+choices = ['RandomAI']
+for item in choices:
+    doc["aiselect"] <= html.OPTION(item)
