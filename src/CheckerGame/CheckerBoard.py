@@ -200,6 +200,57 @@ def getdownmoves(board, tile, filtertype=EMPTY):
 
     return rlist
 
+
+def getupjumpmoves(board, tile, filtertype=(RED, REDKING), rc=3):
+    """
+    Gets the possible up jump moves that a tile can take.
+
+    filtertype can be used to filter the possible jump tiles by a tile type other than RED and REDKING.
+
+    :param board: 32-element list
+    :param tile: tile number (position in board, 0-indexed)
+    :param filtertype: tuple: the tile type(s) that the tile in question can jump
+    :param rc: recursion counter, used to limit recursion.
+            On the calling side, set this to how deep it will search for jumps.
+    :return: list of tuples - (starting tile, ending tile, list of jumped tiles)
+    """
+    iboard = board[:]
+    rlist = []
+
+    if rc == 0:  # limit recursion
+        return []
+
+    # left up jump
+    lu = getleftup(tile)
+    if lu != -1:
+        if iboard[lu] in filtertype:
+            luf = getleftup(lu)
+            if luf != -1:
+                if iboard[luf] == EMPTY:
+                    rlist.append((tile, luf, [lu]))
+                    iboard[luf] = iboard[tile]
+                    iboard[tile] = EMPTY
+                    iboard[lu] = EMPTY
+
+    # right up jump
+    ru = getrightup(tile)
+    if ru != -1:
+        if iboard[ru] in filtertype:
+            ruf = getrightup(ru)
+            if ruf != -1:
+                if iboard[ruf] == EMPTY:
+                    rlist.append((tile, ruf, [ru]))
+                    iboard[ruf] = iboard[tile]
+                    iboard[tile] = EMPTY
+                    iboard[ru] = EMPTY
+
+    for i, st, et, jt in enumerate(rlist):
+        glist = getupjumpmoves(board, et, filtertype, rc - 1)
+        for gst, get, gjt in glist:
+            rlist[i] = (st, get, jt + gjt)
+
+    return rlist
+
 # end helper functions
 
 def getpossiblemoves(board, tile):
@@ -221,6 +272,6 @@ def getpossiblemoves(board, tile):
     if board[tile] == BLACK or board[tile] == REDKING or board[tile] == BLACKKING:
         rlist += getdownmoves(board, tile)
 
-    # todo: get jump moves
+    # get jump moves
 
     return rlist

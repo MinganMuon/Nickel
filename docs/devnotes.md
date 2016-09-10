@@ -6,3 +6,6 @@ different subsections of Nickel?
 follow the DRY principle. Should it be more DRY? For example,
 the get(left/right)(up/down) functions repeat most of their code
 between themselves with minor changes.
+* If there are two paths that a tile can take in a jump, the ui
+would not allow the user to select between them. Is this easily
+fixable?
