@@ -52,7 +52,12 @@ def printboard(board):
     :param board: 32-element list
     :return: nothing
     """
-    panel = doc['panel']
+    panel = doc['panel2']
+
+    # delete previously drawn circles
+    panel.clear()
+
+    # draw new ones
     for tile, tiletype in enumerate(board):
         if tiletype != EMPTY:
             # here goes repetition again...
@@ -116,8 +121,68 @@ def getgpmoves(board, tile):
     return json.loads(req.text)
 
 
+def getgraim(board, color=BLACK):
+    """
+    Makes an AJAX call to get a move from RandomAI
+
+    :param board: 32-element list
+    :param color: what color is the AI playing as?
+    :return: move: [starting tile, ending tile, list of jumped tiles]
+    """
+    req = ajax.ajax()
+    req.open('get', 'getrandomaimove/' + "?board=%s&color=%s" % (json.dumps(board), json.dumps(color)), False)
+    req.set_header('content-type', 'application/x-www-form-urlencoded')
+    req.send()
+    return json.loads(req.text)
+
+
+def makemove(board, move):
+    """
+    Makes a move on a board.
+
+    :param board: 32-element list
+    :param move: [starting tile, ending tile, list of jumped tiles]
+    :return: the modified board (32-element list)
+    """
+    iboard = board[:]
+    if move:
+        st, et, jt = move[0], move[1], move[2]
+        iboard[et] = iboard[st]
+        iboard[st] = EMPTY
+        for tile in jt:
+            iboard[tile] = EMPTY
+    return iboard
+
+
 def newgame(ev):
     alert("Starting new game with " + doc["aiselect"].value + " as AI!")
+
+    whowon = NOWIN
+    board = getgsb()
+    printboard(board)
+    redsturn = True
+    ai = doc["aiselect"].value
+    # game loop
+    while whowon == NOWIN:
+        if redsturn:
+            redsturn = False
+        else:
+            if ai == 'RandomAI':  # do some error checking here?
+                move = getgraim(board, BLACK)
+                alert(move)
+                board = makemove(board, move)
+            redsturn = True
+
+        # print board
+        printboard(board)
+
+        # has the game been won?
+        whowon = getiswon(board)
+
+    if whowon == REDWON:
+        alert("Red won!")
+    elif whowon == BLACKWON:
+        alert("Black won!")
 
 
 doc["play"].bind('click', newgame)

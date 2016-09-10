@@ -7,4 +7,5 @@ urlpatterns = [
     url(r'^gsb/', views.gsb, name='ajax-getstartingboard'),
     url(r'^iswon/', views.iswon, name='ajax-iswon'),
     url(r'^gpmoves/', views.gpmoves, name='ajax-getpossiblemoves'),
+    url(r'^getrandomaimove/', views.graim, name='ajax-getrandomaimove'),
 ]
