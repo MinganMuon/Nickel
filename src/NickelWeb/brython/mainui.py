@@ -1,6 +1,8 @@
 from browser import document as doc
 from browser import svg
 from browser import alert
+from browser import ajax
+import json
 
 # defines, taken from CheckerGame/defines.py
 # I hate copy-pasting but I don't see a way around it, brython being client-side and checkergame being server-side
@@ -74,14 +76,12 @@ def printboard(board):
 def newgame(ev):
     alert("Starting new game with " + doc["aiselect"].title + "as AI!")
 
-    # quick and dirty starting board generation
-    outboard = []
-    for i in range(12):
-        outboard.append(BLACK)
-    for i in range(8):
-        outboard.append(EMPTY)
-    for i in range(12):
-        outboard.append(RED)
-    printboard(outboard)
+    req = ajax.ajax()
+    req.open('GET', 'gsb', False)
+    req.set_header('content-type', 'application/x-www-form-urlencoded')
+    req.send()
+    alert(json.loads(req.text))
+
+    printboard(json.loads(req.text))
 
 doc["play"].bind('click', newgame)
