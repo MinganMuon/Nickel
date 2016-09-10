@@ -265,13 +265,21 @@ def getpossiblemoves(board, tile):
     # return list
     rlist = []
 
+    # get jump moves
+    # red
+    if board[tile] == RED:
+        jlist = getupjumpmoves(board, tile)
+        if jlist:
+            return jlist  # tile has to jump
+    # black
+    # red king
+    # black king
+
     # get non-jump moves
     # red is going up
     if board[tile] == RED or board[tile] == BLACKKING or board[tile] == REDKING:
         rlist += getupmoves(board, tile)
     if board[tile] == BLACK or board[tile] == REDKING or board[tile] == BLACKKING:
         rlist += getdownmoves(board, tile)
-
-    # get jump moves
 
     return rlist
