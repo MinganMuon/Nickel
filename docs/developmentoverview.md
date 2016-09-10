@@ -35,6 +35,7 @@ to a later release.
 ### CheckerGame
 
 * Add support for man/king jumps
+* Add support for kinging men
 * Add support for detecting wins by immobilization^
 * Optimize the functions^
 
@@ -43,12 +44,13 @@ to a later release.
 * Develop the basic UI - DONE
 * Interface the client-side code with the CheckerGame and AI
 libraries - DONE
-* Add the basic game logic
+* Add the basic game logic - DONE
+* Add support for kinging men
 * Add nice graphics and make the UI user-friendly^
 * Add support for selecting different AIs~ - DONE
 * Test/evaluate the UI via different browsers and users~
 
-### AI
+### AI - DONE
 
 * Develop a random AI that gets the possible moves and selects
 one at random. - DONE

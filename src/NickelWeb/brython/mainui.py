@@ -211,22 +211,28 @@ def cbclick(ev):
                 return
             #alert(tile)
             if tile == selectedtile:
-                selectedtile = -1
                 # unhighlight selected tile
-            if selectedtile == -1:
+                doc['panel2'].remove(doc['panel2'].children[-1])
+                selectedtile = -1
+            elif selectedtile == -1:
                 if cboard[tile] == RED or cboard[tile] == REDKING:
                     selectedtile = tile
                     # highlight selected tile
-            if selectedtile != -1 and tile != selectedtile:
+                    scircle = svg.rect(x=(getcolnumber(tile) * 64), y=(getrownumber(tile) * 64),
+                                         width=64, height=64, stroke='orange', stroke_width=3, fill_opacity=0)
+                    scircle.setAttributeNS(None, 'pointer-events', 'none')
+                    doc['panel2'] <= scircle
+            elif selectedtile != -1 and tile != selectedtile:
                 moves = getgpmoves(cboard, selectedtile)
                 for move in moves:
                     if move[0] == selectedtile and move[1] == tile:
+                        # unhighlight selected tile
+                        doc['panel2'].remove(doc['panel2'].children[-1])
                         selectedtile = -1
                         cboard = makemove(cboard, move)
                         alert(move)
                         # print board
                         printboard(cboard)
-                        # unhighlight selected tile
                         redsturn = False
                         return
 
