@@ -158,6 +158,21 @@ def getgpmoves(board, tile):
     return json.loads(req.text)
 
 
+def getgapmoves(board, color):
+    """
+    Makes an AJAX call to determine the possible moves that any tile on board of color can make.
+
+    :param board: 32-element list
+    :param color: what color are we getting moves for?
+    :return: list of lists (tuples?) - [starting tile, ending tile, list of jumped tiles]
+    """
+    req = ajax.ajax()
+    req.open('get', 'gapmoves/' + "?board=%s&color=%s" % (json.dumps(board), json.dumps(color)), False)
+    req.set_header('content-type', 'application/x-www-form-urlencoded')
+    req.send()
+    return json.loads(req.text)
+
+
 def getgraim(board, color=BLACK):
     """
     Makes an AJAX call to get a move from RandomAI
@@ -223,14 +238,14 @@ def cbclick(ev):
                     scircle.setAttributeNS(None, 'pointer-events', 'none')
                     doc['panel2'] <= scircle
             elif selectedtile != -1 and tile != selectedtile:
-                moves = getgpmoves(cboard, selectedtile)
+                moves = getgapmoves(cboard, RED)
                 for move in moves:
                     if move[0] == selectedtile and move[1] == tile:
                         # unhighlight selected tile
                         doc['panel2'].remove(doc['panel2'].children[-1])
                         selectedtile = -1
                         cboard = makemove(cboard, move)
-                        alert(move)
+                        # alert(move)
                         # print board
                         printboard(cboard)
                         redsturn = False
@@ -245,8 +260,9 @@ def gameloop():
             whowon = getiswon(cboard)
             if whowon == NOWIN:
                 if ai == 'RandomAI':  # do some error checking here?
+                    alert(getgapmoves(cboard, BLACK))
                     move = getgraim(cboard, BLACK)
-                    alert(move)
+                    # alert(move)
                     cboard = makemove(cboard, move)
                     # print board
                     printboard(cboard)

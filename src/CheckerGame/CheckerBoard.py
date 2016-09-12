@@ -251,6 +251,57 @@ def getupjumpmoves(board, tile, filtertype=(BLACK, BLACKKING), rc=3):
 
     return rlist
 
+
+def getdownjumpmoves(board, tile, filtertype=(RED, REDKING), rc=3):
+    """
+    Gets the possible down jump moves that a tile can take.
+
+    filtertype can be used to filter the possible jump tiles by a tile type other than the default.
+
+    :param board: 32-element list
+    :param tile: tile number (position in board, 0-indexed)
+    :param filtertype: tuple: the tile type(s) that the tile in question can jump
+    :param rc: recursion counter, used to limit recursion.
+            On the calling side, set this to how deep it will search for jumps.
+    :return: list of tuples - (starting tile, ending tile, list of jumped tiles)
+    """
+    iboard = board[:]
+    rlist = []
+
+    if rc == 0:  # limit recursion
+        return []
+
+    # left down jump
+    lu = getleftdown(tile)
+    if lu != -1:
+        if iboard[lu] in filtertype:
+            luf = getleftdown(lu)
+            if luf != -1:
+                if iboard[luf] == EMPTY:
+                    rlist.append((tile, luf, [lu]))
+                    iboard[luf] = iboard[tile]
+                    iboard[tile] = EMPTY
+                    iboard[lu] = EMPTY
+
+    # right down jump
+    ru = getrightdown(tile)
+    if ru != -1:
+        if iboard[ru] in filtertype:
+            ruf = getrightdown(ru)
+            if ruf != -1:
+                if iboard[ruf] == EMPTY:
+                    rlist.append((tile, ruf, [ru]))
+                    iboard[ruf] = iboard[tile]
+                    iboard[tile] = EMPTY
+                    iboard[ru] = EMPTY
+
+    for i, ritem in enumerate(rlist):
+        glist = getdownjumpmoves(iboard, ritem[1], filtertype, rc - 1)
+        for gst, get, gjt in glist:
+            rlist[i] = (ritem[0], get, ritem[2] + gjt)
+
+    return rlist
+
 # end helper functions
 
 def getpossiblemoves(board, tile):
@@ -272,6 +323,10 @@ def getpossiblemoves(board, tile):
         if jlist:
             return jlist  # tile has to jump
     # black
+    if board[tile] == BLACK:
+        jlist = getdownjumpmoves(board, tile)
+        if jlist:
+            return jlist  # tile has to jump
     # red king
     # black king
 
@@ -283,3 +338,35 @@ def getpossiblemoves(board, tile):
         rlist += getdownmoves(board, tile)
 
     return rlist
+
+
+def getallpossiblemoves(board, color):
+    """
+    Gets all possible moves for every tile on the board.
+
+    :param board: 32-element list
+    :param color: what color are we getting moves for?
+    :return: list of tuples - (starting tile, ending tile, list of jumped tiles)
+    """
+    moves = []
+
+    for tile, tiletype in enumerate(board):
+        if color == BLACK:
+            if tiletype == BLACK or tiletype == BLACKKING:
+                moves += getpossiblemoves(board, tile)
+        if color == RED:
+            if tiletype == RED or tiletype == REDKING:
+                moves += getpossiblemoves(board, tile)
+
+    result = []
+    onlyjump = False
+    if len(moves) != 0:  # now delete non-jump moves if needed
+        for move in moves:
+            if move[2]:
+                onlyjump = True
+                result.append(move)
+
+    if onlyjump:
+        return result
+    else:
+        return moves

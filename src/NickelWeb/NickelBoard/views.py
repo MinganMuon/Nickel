@@ -25,6 +25,12 @@ def gpmoves(request):
     return HttpResponse(json.dumps(Cb.getpossiblemoves(board, tile)), content_type = "application/json")
 
 
+def gapmoves(request):
+    board = json.loads(request.GET['board'])
+    color = json.loads(request.GET['color'])
+    return HttpResponse(json.dumps(Cb.getallpossiblemoves(board, color)), content_type = "application/json")
+
+
 def graim(request):
     board = json.loads(request.GET['board'])
     color = json.loads(request.GET['color'])
