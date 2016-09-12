@@ -9,4 +9,5 @@ urlpatterns = [
     url(r'^gpmoves/', views.gpmoves, name='ajax-getpossiblemoves'),
     url(r'^gapmoves/', views.gapmoves, name='ajax-getallpossiblemoves'),
     url(r'^getrandomaimove/', views.graim, name='ajax-getrandomaimove'),
+    url(r'^makemove/', views.domakemove, name='ajax-makemove'),
 ]

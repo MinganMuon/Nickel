@@ -370,3 +370,44 @@ def getallpossiblemoves(board, color):
         return result
     else:
         return moves
+
+
+def iskingable(board, tile):
+    """
+    Determines if a tile is kingable.
+
+    :param tile: 0-indexed tile number
+    :return: bool: true if tile is kingable
+    """
+    if tile in bottomtiles:
+        if board[tile] == BLACK:
+            return True
+    elif tile in toptiles:
+        if board[tile] == RED:
+            return True
+    else:
+        return False
+
+
+def makemove(board, move):
+    """
+    Makes a move on a board. Kings the tile if needed
+
+    :param board: 32-element list
+    :param move: [starting tile, ending tile, list of jumped tiles]
+    :return: the modified board (32-element list)
+    """
+    iboard = board[:]
+    if move:
+        st, et, jt = move[0], move[1], move[2]
+        iboard[et] = iboard[st]
+        iboard[st] = EMPTY
+        for tile in jt:
+            iboard[tile] = EMPTY
+        if iskingable(iboard, et):
+            if iboard[et] == RED:
+                iboard[et] = REDKING
+            elif iboard[et] == BLACK:
+                iboard[et] = BLACKKING
+
+    return iboard

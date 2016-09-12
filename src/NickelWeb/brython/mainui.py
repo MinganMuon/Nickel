@@ -188,22 +188,20 @@ def getgraim(board, color=BLACK):
     return json.loads(req.text)
 
 
-def makemove(board, move):
+def domakemove(board, move):
     """
-    Makes a move on a board.
+    Makes an AJAX call to determine the possible moves that any tile on board of color can make.
 
     :param board: 32-element list
-    :param move: [starting tile, ending tile, list of jumped tiles]
-    :return: the modified board (32-element list)
+    :param move: what move are we making?
+    :return: modified board (32-element list)
     """
-    iboard = board[:]
-    if move:
-        st, et, jt = move[0], move[1], move[2]
-        iboard[et] = iboard[st]
-        iboard[st] = EMPTY
-        for tile in jt:
-            iboard[tile] = EMPTY
-    return iboard
+    req = ajax.ajax()
+    req.open('get', 'makemove/' + "?board=%s&move=%s" % (json.dumps(board), json.dumps(move)), False)
+    req.set_header('content-type', 'application/x-www-form-urlencoded')
+    req.send()
+    return json.loads(req.text)
+
 
 # I HATE having to make these global
 redsturn = True
@@ -244,7 +242,7 @@ def cbclick(ev):
                         # unhighlight selected tile
                         doc['panel2'].remove(doc['panel2'].children[-1])
                         selectedtile = -1
-                        cboard = makemove(cboard, move)
+                        cboard = domakemove(cboard, move)
                         # alert(move)
                         # print board
                         printboard(cboard)
@@ -263,7 +261,7 @@ def gameloop():
                     alert(getgapmoves(cboard, BLACK))
                     move = getgraim(cboard, BLACK)
                     # alert(move)
-                    cboard = makemove(cboard, move)
+                    cboard = domakemove(cboard, move)
                     # print board
                     printboard(cboard)
                 redsturn = True

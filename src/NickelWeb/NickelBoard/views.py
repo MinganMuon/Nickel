@@ -35,3 +35,9 @@ def graim(request):
     board = json.loads(request.GET['board'])
     color = json.loads(request.GET['color'])
     return HttpResponse(json.dumps(RandomAI.RandomAI.getrandomaimove(board, color)), content_type = "application/json")
+
+
+def domakemove(request):
+    board = json.loads(request.GET['board'])
+    move = json.loads(request.GET['move'])
+    return HttpResponse(json.dumps(Cb.makemove(board, move)), content_type = "application/json")
