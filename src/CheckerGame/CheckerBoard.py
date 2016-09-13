@@ -38,9 +38,9 @@ def iswon(board):
     :return: BLACKWON, REDWON, or NOWIN
     """
     won = NOWIN
-    if board.count(RED) == 0:  # black wins
+    if (board.count(RED) + board.count(REDKING)) == 0:  # black wins
         won = BLACKWON
-    elif board.count(BLACK) == 0:  # red wins
+    elif (board.count(BLACK) + board.count(BLACKKING)) == 0:  # red wins
         won = REDWON
     # if no moves are possible for a color, the other color wins
     elif not getallpossiblemoves(board, RED):  # black wins
