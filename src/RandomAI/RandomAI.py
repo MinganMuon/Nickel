@@ -18,18 +18,6 @@ def getrandomaimove(board, color=BLACK):
 
     moves = Cb.getallpossiblemoves(board, color)
 
-    # moves = []
-    #
-    # for tile, tiletype in enumerate(board):
-    #     if color == BLACK:
-    #         if tiletype == BLACK or tiletype == BLACKKING:
-    #             movesi = Cb.getpossiblemoves(board, tile)
-    #             moves += movesi
-    #     if color == RED:
-    #         if tiletype == RED or tiletype == REDKING:
-    #             movesi = Cb.getpossiblemoves(board, tile)
-    #             moves += movesi
-
     if (len(moves) != 0):
         movenum = random.randint(0, len(moves) - 1)
         move = moves[movenum]

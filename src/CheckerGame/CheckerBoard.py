@@ -42,7 +42,11 @@ def iswon(board):
         won = BLACKWON
     elif board.count(BLACK) == 0:  # red wins
         won = REDWON
-    # todo: if no moves are possible for a color, the other color wins
+    # if no moves are possible for a color, the other color wins
+    elif not getallpossiblemoves(board, RED):  # black wins
+        won = BLACKWON
+    elif not getallpossiblemoves(board, BLACK):  # red wins
+        won = REDWON
     return won
 
 # helper functions for getpossiblemoves
