@@ -79,5 +79,19 @@ class TestCheckerBoard(unittest.TestCase):
         self.assertEqual(Cb.getupjumpmoves(sboard, 22), [(22, 6, [17, 9]), (22, 6, [18, 10])])
         # this is fun
 
+    def test_getkingjumpmoves(self):
+        sboard = Cb.getstartingboard()
+        sboard[22] = REDKING
+        sboard[17] = BLACK
+        self.assertEqual(Cb.getkingjumpmoves(sboard, 22), [(22, 13, [17])])
+        sboard[6] = EMPTY
+        self.assertEqual(Cb.getkingjumpmoves(sboard, 22), [(22, 15, [17, 9, 10])])
+        sboard[18] = BLACK
+        self.assertEqual(Cb.getkingjumpmoves(sboard, 22), [(22, 15, [17, 9, 10]), (22, 13, [18, 10, 9])])
+        sboard[22] = EMPTY
+        sboard[6] = REDKING
+        self.assertEqual(Cb.getkingjumpmoves(sboard, 6), [(6, 15, [9, 17, 18]), (6, 13, [10, 18, 17])])
+        # it works! yay!
+
 if __name__ == '__main__':
     unittest.main()
