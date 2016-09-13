@@ -306,6 +306,40 @@ def getdownjumpmoves(board, tile, filtertype=(RED, REDKING), rc=3):
 
     return rlist
 
+
+def getkingjumpmoves(board, tile, rc=3):
+    """
+    Gets the possible jump moves that a king can take.
+
+    :param board: 32-element list
+    :param tile: tile number (position in board, 0-indexed)
+    :param rc: recursion counter, used to limit recursion.
+            On the calling side, set this to how deep it will search for jumps.
+    :return: list of tuples - (starting tile, ending tile, list of jumped tiles)
+    """
+    iboard = board[:]
+    rlist = []
+    if board[tile] == REDKING:
+        filtertype = (BLACK, BLACKKING)
+    elif board[tile] == BLACKKING:
+        filtertype = (RED, REDKING)
+    else:
+        # tile is not a king
+        return []
+
+    if rc == 0:  # limit recursion
+        return []
+
+    rlist += getdownjumpmoves(iboard, tile, filtertype, rc=1)
+    rlist += getupjumpmoves(iboard, tile, filtertype, rc=1)
+
+    for i, ritem in enumerate(rlist):
+        glist = getkingjumpmoves(makemove(iboard, ritem), ritem[1], rc - 1)
+        for gst, get, gjt in glist:
+            rlist[i] = (ritem[0], get, ritem[2] + gjt)
+
+    return rlist
+
 # end helper functions
 
 def getpossiblemoves(board, tile):
@@ -332,7 +366,15 @@ def getpossiblemoves(board, tile):
         if jlist:
             return jlist  # tile has to jump
     # red king
+    if board[tile] == REDKING:
+        jlist = getkingjumpmoves(board, tile)
+        if jlist:
+            return jlist  # tile has to jump
     # black king
+    if board[tile] == BLACKKING:
+        jlist = getkingjumpmoves(board, tile)
+        if jlist:
+            return jlist  # tile has to jump
 
     # get non-jump moves
     # red is going up

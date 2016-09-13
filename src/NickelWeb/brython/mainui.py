@@ -253,15 +253,16 @@ def cbclick(ev):
 def gameloop():
         global cboard, redsturn, selectedtile, ai, whowon, glt
 
-        if not redsturn:
+        if not redsturn and whowon != 'done':
             # has the game been won?
             whowon = getiswon(cboard)
             if whowon == NOWIN:
                 if ai == 'RandomAI':  # do some error checking here?
-                    alert(getgapmoves(cboard, BLACK))
+                    # alert(getgapmoves(cboard, BLACK))
                     move = getgraim(cboard, BLACK)
                     # alert(move)
                     cboard = domakemove(cboard, move)
+                    # alert(getgapmoves(cboard, RED))
                     # print board
                     printboard(cboard)
                 redsturn = True
@@ -271,15 +272,17 @@ def gameloop():
         if whowon == REDWON:
             alert("Red won!")
             redsturn = False  # user can't move after a win
+            whowon = 'done'  # stop the annoying alert
             timer.clearinterval(glt)
         elif whowon == BLACKWON:
             alert("Black won!")
             redsturn = False  # user can't move after a win
+            whowon = 'done'  # stop the annoying alert
             timer.clearinterval(glt)
 
 
 def newgame(ev):
-    global cboard, redsturn, selectedtile, ai, glt
+    global cboard, redsturn, selectedtile, ai, glt, whowon
 
     alert("Starting new game with " + doc["aiselect"].value + " as AI!")
 
