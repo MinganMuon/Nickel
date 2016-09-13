@@ -232,9 +232,6 @@ def getupjumpmoves(board, tile, filtertype=(BLACK, BLACKKING), rc=3):
             if luf != -1:
                 if iboard[luf] == EMPTY:
                     rlist.append((tile, luf, [lu]))
-                    iboard[luf] = iboard[tile]
-                    iboard[tile] = EMPTY
-                    iboard[lu] = EMPTY
 
     # right up jump
     ru = getrightup(tile)
@@ -244,12 +241,9 @@ def getupjumpmoves(board, tile, filtertype=(BLACK, BLACKKING), rc=3):
             if ruf != -1:
                 if iboard[ruf] == EMPTY:
                     rlist.append((tile, ruf, [ru]))
-                    iboard[ruf] = iboard[tile]
-                    iboard[tile] = EMPTY
-                    iboard[ru] = EMPTY
 
     for i, ritem in enumerate(rlist):
-        glist = getupjumpmoves(iboard, ritem[1], filtertype, rc - 1)
+        glist = getupjumpmoves(makemove(iboard, ritem), ritem[1], filtertype, rc - 1)
         for gst, get, gjt in glist:
             rlist[i] = (ritem[0], get, ritem[2] + gjt)
 
@@ -283,9 +277,6 @@ def getdownjumpmoves(board, tile, filtertype=(RED, REDKING), rc=3):
             if luf != -1:
                 if iboard[luf] == EMPTY:
                     rlist.append((tile, luf, [lu]))
-                    iboard[luf] = iboard[tile]
-                    iboard[tile] = EMPTY
-                    iboard[lu] = EMPTY
 
     # right down jump
     ru = getrightdown(tile)
@@ -295,12 +286,9 @@ def getdownjumpmoves(board, tile, filtertype=(RED, REDKING), rc=3):
             if ruf != -1:
                 if iboard[ruf] == EMPTY:
                     rlist.append((tile, ruf, [ru]))
-                    iboard[ruf] = iboard[tile]
-                    iboard[tile] = EMPTY
-                    iboard[ru] = EMPTY
 
     for i, ritem in enumerate(rlist):
-        glist = getdownjumpmoves(iboard, ritem[1], filtertype, rc - 1)
+        glist = getdownjumpmoves(makemove(iboard, ritem), ritem[1], filtertype, rc - 1)
         for gst, get, gjt in glist:
             rlist[i] = (ritem[0], get, ritem[2] + gjt)
 

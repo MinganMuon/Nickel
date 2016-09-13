@@ -220,9 +220,9 @@ def cbclick(ev):
             col = int(ev.clientX / 64)
             tile = gettilenumber(row, col)
             if tile == 'error':
-                alert(tile)
+                # alert(tile)
                 return
-            #alert(tile)
+            # alert(tile)
             if tile == selectedtile:
                 # unhighlight selected tile
                 doc['panel2'].remove(doc['panel2'].children[-1])
