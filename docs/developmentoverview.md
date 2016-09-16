@@ -15,7 +15,7 @@ research. It consists of three sections:
 
 The web interface will give a easy UI for users to play checkers
 from. It may have support for multiple users, with their
-wins/losses against different AIs recorded in a database It 
+wins/losses against different AIs recorded in a database. It 
 will have support for multiple AIs.
 
 Nickel was developed for AI research, particularly in the field
@@ -25,32 +25,11 @@ the web interface be able to access the latest AI generation,
 the AI section will have several desktop windows for evolving the
 neural networks and other AI related tasks.
 
-## Roadmap to 0.1
+## Roadmap to 0.x
 
 A ? means that said goal may be pushed to a later release.
 A ~ means that said goal will be worked on but not completed
 until a later release. A ^ means that said goal has been pushed
 to a later release.
 
-### CheckerGame
-
-* Add support for man/king jumps
-* Add support for kinging men - DONE
-* Add support for detecting wins by immobilization - DONE
-* Optimize the functions^
-
-### Web Interface
-
-* Develop the basic UI - DONE
-* Interface the client-side code with the CheckerGame and AI
-libraries - DONE
-* Add the basic game logic - DONE
-* Add support for kinging men - DONE
-* Add nice graphics and make the UI user-friendly^
-* Add support for selecting different AIs~ - DONE
-* Test/evaluate the UI via different browsers and users~
-
-### AI - DONE
-
-* Develop a random AI that gets the possible moves and selects
-one at random. - DONE
+### todo: fill this in
