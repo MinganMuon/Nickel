@@ -25,11 +25,30 @@ the web interface be able to access the latest AI generation,
 the AI section will have several desktop windows for evolving the
 neural networks and other AI related tasks.
 
-## Roadmap to 0.x
+## Roadmap to 0.2
 
-A ? means that said goal may be pushed to a later release.
-A ~ means that said goal will be worked on but not completed
-until a later release. A ^ means that said goal has been pushed
-to a later release.
+* Create a AI switchboard to easily interface AIs, 
+django/brython, and other parts of Nickel. It will look like
+AIswitchboard.getnextmove(AI, board, color) or something
+like that, instead of having to interface all the AIs through
+django or all the AIs to fitness testing or something.
 
-### todo: fill this in
+* Redo the AI selection interface on django and brython to link
+into the AI switchboard.
+
+* Create a game playing interface for AI vs. AI. This will put
+an AI against an AI in a game and then return who won.
+
+* Create a fitness tester for AIs. This will play several games
+AI vs. AI to see which one of them is stronger, and output the
+results.
+
+## Roadmap to 0.3
+
+* Implement a minimax module.
+
+* Improve the minimax module (depth sensing, optimization, etc.)
+
+* Implement a simple evaluation function to test minimax.
+
+* Test the new AI against humans and the random AI.
