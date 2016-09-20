@@ -37,7 +37,7 @@ django or all the AIs to fitness testing or something. - DONE
 into the AI switchboard. - DONE
 
 * Create a game playing interface for AI vs. AI. This will put
-an AI against an AI in a game and then return who won.
+an AI against an AI in a game and then return who won. - DONE
 
 * Create a fitness tester for AIs. This will play several games
 AI vs. AI to see which one of them is stronger, and output the
