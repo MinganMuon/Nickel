@@ -31,10 +31,10 @@ neural networks and other AI related tasks.
 django/brython, and other parts of Nickel. It will look like
 AIswitchboard.getnextmove(AI, board, color) or something
 like that, instead of having to interface all the AIs through
-django or all the AIs to fitness testing or something.
+django or all the AIs to fitness testing or something. - DONE
 
 * Redo the AI selection interface on django and brython to link
-into the AI switchboard.
+into the AI switchboard. - DONE
 
 * Create a game playing interface for AI vs. AI. This will put
 an AI against an AI in a game and then return who won.

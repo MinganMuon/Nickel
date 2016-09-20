@@ -28,7 +28,7 @@ def getrownumber(tile):
     :param tile: tile number, 0-indexed
     :return: 0-indexed row number of tile
     """
-    return int(tile/4)
+    return int(tile / 4)
 
 
 def getcolnumber(tile):
@@ -38,11 +38,11 @@ def getcolnumber(tile):
     :param tile: tile number, 0-indexed
     :return: 0-indexed column number of tile
     """
-    even = int(tile/4) % 2  # 1 if even
+    even = int(tile / 4) % 2  # 1 if even
     if even == 1:
-        x = (tile - (int(tile/4))*4)*2
+        x = (tile - (int(tile / 4)) * 4) * 2
     else:
-        x = (tile - (int(tile/4))*4)*2 + 1
+        x = (tile - (int(tile / 4)) * 4) * 2 + 1
     return x
 
 
@@ -55,22 +55,22 @@ def gettilenumber(row, col):
     :return: tile number, 0-indexed
     """
 
-    even = row % 2 # 1 if even
+    even = row % 2  # 1 if even
     tile = row * 4
     col += 1
     if even == 1:
         col += 1
-        tile += col/2
+        tile += col / 2
     else:
         col += 2
-        tile += col/2
+        tile += col / 2
 
     # get it to a int
     if tile.is_integer():
         tile = int(tile)
     else:
         # something is wrong; the given row, col do not specify a valid tile position...
-        return 'error' # I should, like, do valid error checking
+        return 'error'  # I should, like, do valid error checking
 
     if even == 1:
         return tile - 1
@@ -95,22 +95,22 @@ def printboard(board):
         if tiletype != EMPTY:
             # here goes repetition again...
             if tiletype == RED:
-                scircle = svg.circle(cx=(getcolnumber(tile)*64 + 32), cy=(getrownumber(tile)*64 + 32),
+                scircle = svg.circle(cx=(getcolnumber(tile) * 64 + 32), cy=(getrownumber(tile) * 64 + 32),
                                      r=32, fill="red")  # +32 for radius offset
                 scircle.setAttributeNS(None, 'pointer-events', 'none')
                 panel <= scircle
             elif tiletype == REDKING:
-                scircle = svg.circle(cx=(getcolnumber(tile)*64 + 32), cy=(getrownumber(tile)*64 + 32),
+                scircle = svg.circle(cx=(getcolnumber(tile) * 64 + 32), cy=(getrownumber(tile) * 64 + 32),
                                      r=32, fill="red", stroke="orange", stroke_width=5)  # +32 for radius offset
                 scircle.setAttributeNS(None, 'pointer-events', 'none')
                 panel <= scircle
             if tiletype == BLACK:
-                scircle = svg.circle(cx=(getcolnumber(tile)*64 + 32), cy=(getrownumber(tile)*64 + 32),
+                scircle = svg.circle(cx=(getcolnumber(tile) * 64 + 32), cy=(getrownumber(tile) * 64 + 32),
                                      r=32, fill="black")  # +32 for radius offset
                 scircle.setAttributeNS(None, 'pointer-events', 'none')
                 panel <= scircle
             elif tiletype == BLACKKING:
-                scircle = svg.circle(cx=(getcolnumber(tile)*64 + 32), cy=(getrownumber(tile)*64 + 32),
+                scircle = svg.circle(cx=(getcolnumber(tile) * 64 + 32), cy=(getrownumber(tile) * 64 + 32),
                                      r=32, fill="black", stroke="orange", stroke_width=5)  # +32 for radius offset
                 scircle.setAttributeNS(None, 'pointer-events', 'none')
                 panel <= scircle
@@ -173,16 +173,31 @@ def getgapmoves(board, color):
     return json.loads(req.text)
 
 
-def getgraim(board, color=BLACK):
+def getgaim(ai, board, color=BLACK):
     """
-    Makes an AJAX call to get a move from RandomAI
+    Makes an AJAX call to get a move from a specific AI
 
+    :param ai: what ai?
     :param board: 32-element list
     :param color: what color is the AI playing as?
     :return: move: [starting tile, ending tile, list of jumped tiles]
     """
     req = ajax.ajax()
-    req.open('get', 'getrandomaimove/' + "?board=%s&color=%s" % (json.dumps(board), json.dumps(color)), False)
+    req.open('get', 'getaimove/' + "?board=%s&color=%s&ai=%s" % (json.dumps(board), json.dumps(color), json.dumps(ai)),
+             False)
+    req.set_header('content-type', 'application/x-www-form-urlencoded')
+    req.send()
+    return json.loads(req.text)
+
+
+def getais():
+    """
+    Makes an AJAX call to get the list of possible AIs
+
+    :return: list of AIs
+    """
+    req = ajax.ajax()
+    req.open('GET', 'getais/', False)
     req.set_header('content-type', 'application/x-www-form-urlencoded')
     req.send()
     return json.loads(req.text)
@@ -211,6 +226,7 @@ ai = ""
 whowon = NOWIN
 glt = None
 
+
 def cbclick(ev):
     global selectedtile, cboard, redsturn
 
@@ -232,7 +248,7 @@ def cbclick(ev):
                     selectedtile = tile
                     # highlight selected tile
                     scircle = svg.rect(x=(getcolnumber(tile) * 64), y=(getrownumber(tile) * 64),
-                                         width=64, height=64, stroke='orange', stroke_width=3, fill_opacity=0)
+                                       width=64, height=64, stroke='orange', stroke_width=3, fill_opacity=0)
                     scircle.setAttributeNS(None, 'pointer-events', 'none')
                     doc['panel2'] <= scircle
             elif selectedtile != -1 and tile != selectedtile:
@@ -251,34 +267,33 @@ def cbclick(ev):
 
 
 def gameloop():
-        global cboard, redsturn, selectedtile, ai, whowon, glt
+    global cboard, redsturn, selectedtile, ai, whowon, glt
 
-        if not redsturn and whowon != 'done':
+    if not redsturn and whowon != 'done':
+        # has the game been won?
+        whowon = getiswon(cboard)
+        if whowon == NOWIN:
+            # alert(getgapmoves(cboard, BLACK))
+            move = getgaim(ai, cboard, BLACK)
+            # alert(move)
+            cboard = domakemove(cboard, move)
+            # alert(getgapmoves(cboard, RED))
+            # print board
+            printboard(cboard)
+            redsturn = True
             # has the game been won?
             whowon = getiswon(cboard)
-            if whowon == NOWIN:
-                if ai == 'RandomAI':  # do some error checking here?
-                    # alert(getgapmoves(cboard, BLACK))
-                    move = getgraim(cboard, BLACK)
-                    # alert(move)
-                    cboard = domakemove(cboard, move)
-                    # alert(getgapmoves(cboard, RED))
-                    # print board
-                    printboard(cboard)
-                redsturn = True
-                # has the game been won?
-                whowon = getiswon(cboard)
 
-        if whowon == REDWON:
-            alert("Red won!")
-            redsturn = False  # user can't move after a win
-            whowon = 'done'  # stop the annoying alert
-            timer.clearinterval(glt)
-        elif whowon == BLACKWON:
-            alert("Black won!")
-            redsturn = False  # user can't move after a win
-            whowon = 'done'  # stop the annoying alert
-            timer.clearinterval(glt)
+    if whowon == REDWON:
+        alert("Red won!")
+        redsturn = False  # user can't move after a win
+        whowon = 'done'  # stop the annoying alert
+        timer.clearinterval(glt)
+    elif whowon == BLACKWON:
+        alert("Black won!")
+        redsturn = False  # user can't move after a win
+        whowon = 'done'  # stop the annoying alert
+        timer.clearinterval(glt)
 
 
 def newgame(ev):
@@ -298,6 +313,6 @@ def newgame(ev):
 doc["play"].bind('click', newgame)
 doc["svgp"].bind('click', cbclick)
 
-choices = ['RandomAI']
+choices = getais()
 for item in choices:
     doc["aiselect"] <= html.OPTION(item)

@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'^iswon/', views.iswon, name='ajax-iswon'),
     url(r'^gpmoves/', views.gpmoves, name='ajax-getpossiblemoves'),
     url(r'^gapmoves/', views.gapmoves, name='ajax-getallpossiblemoves'),
-    url(r'^getrandomaimove/', views.graim, name='ajax-getrandomaimove'),
+    url(r'^getaimove/', views.gaim, name='ajax-getaimove'),
+    url(r'^getais/', views.gais, name='ajax-getais'),
     url(r'^makemove/', views.domakemove, name='ajax-makemove'),
 ]

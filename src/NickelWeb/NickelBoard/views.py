@@ -3,7 +3,7 @@ from django.http import HttpResponse
 import json
 
 import CheckerGame.CheckerBoard as Cb
-import RandomAI.RandomAI
+import AIswitchboard.switchboard as sb
 
 
 def index(request):
@@ -31,10 +31,15 @@ def gapmoves(request):
     return HttpResponse(json.dumps(Cb.getallpossiblemoves(board, color)), content_type = "application/json")
 
 
-def graim(request):
+def gaim(request):
+    ai = json.loads(request.GET['ai'])
     board = json.loads(request.GET['board'])
     color = json.loads(request.GET['color'])
-    return HttpResponse(json.dumps(RandomAI.RandomAI.getrandomaimove(board, color)), content_type = "application/json")
+    return HttpResponse(json.dumps(sb.getaimove(ai, board, color)), content_type = "application/json")
+
+
+def gais(request):
+    return HttpResponse(json.dumps(sb.SWITCHABLE_AIS), content_type = "application/json")
 
 
 def domakemove(request):
