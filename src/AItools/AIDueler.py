@@ -25,14 +25,14 @@ def duelit(aione, aitwo, turnlimit=100):
 
     while (turn < turnlimit):
         # first ai
-        move = Sb.getaimove(aione, board, RED)
-        board = Cb.makemove(board, move)
+        fmove = Sb.getaimove(aione, board, RED)
+        board = Cb.makemove(board, fmove)
         state = Cb.iswon(board)
         if state != NOWIN:
             break
         # second ai
-        move = Sb.getaimove(aitwo, board, RED)
-        board = Cb.makemove(board, move)
+        smove = Sb.getaimove(aitwo, board, BLACK)
+        board = Cb.makemove(board, smove)
         state = Cb.iswon(board)
         if state != NOWIN:
             break
